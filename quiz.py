@@ -19,12 +19,16 @@ async def quiz(request):
     #     j+=1
     #     if j<len(data['options']):
     #         option_string+=", "
+
+    dt = await request.json()
     
-    prompt="Solve this DBMS oracle question "+str(await request.json())+"Give responce with the correct option content as \"Correct Answer:<Correct option here>\""
+    prompt="Solve this DBMS oracle question "+str(dt)+"Give responce with the correct option content as \"Correct Answer:<Correct option here>\""
 
     response = model.generate_content(prompt)
 
-    return web.json_response({"message": segregator(data['options'],response)})
+
+
+    return web.json_response({"message": segregator(dt['options'],response)})
 
 def segregator(options,answer):
     presence = {}
