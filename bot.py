@@ -350,16 +350,16 @@ class Bot:
                 if response.status_code == 200:
                     customPrint("Question Sent Succesfully", "SUCCESS")
                     result = response.json()
-                    finalAnswer = result["message"]
+                    index = result["message"]
 
                 else:
                     pass
             except Exception as e:
                 print(e)
-            if finalAnswer in optArr:
-                index = optArr.index(finalAnswer)
-            else:
-                index = 0
+            # if finalAnswer in optArr:
+            #     index = optArr.index(finalAnswer)
+            # else:
+            #     index = 0
             self.quizPress(index)
             quizCounter += 1
 

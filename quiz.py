@@ -24,22 +24,19 @@ async def quiz(request):
     
     prompt="Solve this DBMS oracle question "+str(dt)+"Give responce with the correct option content as \"Correct Answer:<Correct option here>\""
 
+    print(dt)
     response = model.generate_content(prompt)
 
+    return web.json_response({"message": segregator(response)})
 
-
-    return web.json_response({"message": segregator(dt['options'],response)})
-
-def segregator(options,answer):
+def segregator(answer):
     presence = {}
-    for value in options:
-        presence[value] = value in answer
+    for value in range(1,5):
+        presence[value] = value
 
     for value, present in presence.items():
         if present :
             return value
-        
-    return options[0]
 
 app = web.Application()
 app.router.add_post('/sendquestion', quiz)
