@@ -27,16 +27,12 @@ async def quiz(request):
     print(dt)
     response = model.generate_content(prompt)
 
-    return web.json_response({"message": segregator(response)})
+    print(str(response))
+
+    return web.json_response({"message": segregator(response.candidates[0].content.parts[0].text)})
 
 def segregator(answer):
-    presence = {}
-    for value in range(1,5):
-        presence[value] = value
-
-    for value, present in presence.items():
-        if present :
-            return value
+    return answer.split(":")[1].split("\n")[0].strip()
 
 app = web.Application()
 app.router.add_post('/sendquestion', quiz)

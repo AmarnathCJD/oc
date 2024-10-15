@@ -1,11 +1,14 @@
 import time
-from config import DRIVER_PATH, TIMEOUT, READ_TIME
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import requests
 import json
+
+DRIVER_PATH = "./chromedriver.exe"
+TIMEOUT = 5
+READ_TIME = 5
 
 
 HEADER = "\033[95m"
@@ -318,10 +321,21 @@ class Bot:
     def quizExtractor(self):
         quizCounter = 0
         while quizCounter != 2:
+            # time.sleep(2)
             quizQuestionOption = {"question": "", "options": []}
 
             optArr = []
             try:
+                waiter = WebDriverWait(self.driver, 16)
+                waiter.until(
+                    EC.presence_of_element_located(
+                        (
+                            By.CLASS_NAME,
+                            "player-shape-view__shape-view-rich-text-view_wrap-text",
+                        )
+                    )
+                )
+
                 question = self.driver.find_element_by_class_name(
                     "player-shape-view__shape-view-rich-text-view_wrap-text"
                 )
@@ -350,16 +364,16 @@ class Bot:
                 if response.status_code == 200:
                     customPrint("Question Sent Succesfully", "SUCCESS")
                     result = response.json()
-                    index = result["message"]
+                    finalAnswer = result["message"]
 
                 else:
                     pass
             except Exception as e:
                 print(e)
-            # if finalAnswer in optArr:
-            #     index = optArr.index(finalAnswer)
-            # else:
-            #     index = 0
+            if finalAnswer in optArr:
+                index = optArr.index(finalAnswer)
+            else:
+                index = 0
             self.quizPress(index)
             quizCounter += 1
 
